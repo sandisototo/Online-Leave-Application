@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html ng-app="starterApp">
+  <head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+
+
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Open+Sans'>
+
+        <link rel="stylesheet" href="./../css/login.css">
+        <link rel="stylesheet" href="./../../bower_components/angular-material/angular-material.min.css"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+
+
+
+
+  </head>
+
+  <body>
+
+    <div class="cont" ng-controller="LoginController">
+
+  <div class="demo">
+
+    <div class="login" >
+      <div class="leaveIcon"><img src="./../img/editing.svg"/></div>
+
+	  <form name='myForm' ng-model='user'>
+
+      <div class="login__form">
+		<div class="leaveSystem"><h1>Leave System</h1></div>
+        <div class="login__row">
+          <svg class="login__icon name svg-icon" viewBox="0 0 20 20">
+            <path d="M0,20 a10,8 0 0,1 20,0z M10,0 a4,4 0 0,1 0,8 a4,4 0 0,1 0,-8" />
+          </svg>
+          <input type="text" class="login__input name" required ng-model="user.email" placeholder="Email"/>
+        </div>
+        <div class="login__row">
+          <svg class="login__icon pass svg-icon" viewBox="0 0 20 20">
+            <path d="M0,20 20,20 20,8 0,8z M10,13 10,16z M4,8 a6,8 0 0,1 12,0" />
+          </svg>
+          <input type="password" class="login__input pass" required ng-model="user.password" placeholder="Password"/>
+
+        </div>
+        <button type="button" class="login__submit" ng-show="myForm.$valid" ng-click="login(user)">Sign in</button>
+        <button type="button" class="login__submit" ng-click="forgot_password()">Forgot password</button>
+       </form>
+
+      </div>
+    </div>
+
+    <div class="app" ng-show="failed">
+      <div class="app__top">
+        <p class="app__hello">Failed</p>
+        <p class="leaveSystem">Incorrect Email OR Password</p>
+        <p class="leaveSystem" style="font-size: x-large;">{{error}}</p>
+      </div>
+      <div class="app__logout">
+        <svg class="app__logout-icon svg-icon" viewBox="0 0 20 20">
+          <path d="M6,3 a8,8 0 1,0 8,0 M10,0 10,12"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="app" ng-show="success" >
+      <div class="app__top">
+        <p class="app__hello">Welcome</p>
+      <div class="leaveSystem" ng-model="user"><h1>{{user.name}} {{user.surname}}</h1></div>
+         <div class="app__user">
+
+
+        </div>
+        <div class="app__month">
+
+        </div>
+
+      </div>
+      <h1 style="    color: blanchedalmond;
+    font-size: large;    margin-top: 14px;">Leave Days Left</h1>
+<table class="rwd-table" style="font-size: small; overflow: visible;">
+<tr>
+  <th>Annual </th>
+  <th>Sick </th>
+  <th>Family</th>
+  <th>Special </th>
+  <th>Study </th>
+</tr>
+<tr>
+  <td data-th="Annual">{{user_all_leave_days.annual}}</td>
+  <td data-th="Sick">{{user_all_leave_days.sick}}</td>
+  <td data-th="Family">{{user_all_leave_days.family}}</td>
+  <td data-th="Special">{{user_all_leave_days.special}}</td>
+  <td data-th="Study" style="margin-right:20px;">{{user_all_leave_days.study}}</td>
+</tr>
+
+</table>
+      <div class="app__logout" ng-click="proceed()">
+            <i class="material-icons" style="padding: 23%;">forward</i>
+      </div>
+    </div>
+
+    <div class="app" ng-show="forgot" style="height: 70%;">
+      <div class="app__top" >
+        <p class="leaveSystem" style="font-size: x-large;">Reset Password</p>
+        <p class="leaveSystem" style="font-size: large;">Please Enter your email address</p>
+
+        <input style="height: 40%;" type="text" class="login__input name" required ng-model="forgot_password_email" placeholder="Email"/>
+      </div>
+      <div class="app__logout" ng-click="reset_password(forgot_password_email)">
+            <i class="material-icons" style="padding: 23%;">forward</i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  Scripts-->
+<script src='./bower_components/jquery/dist/jquery.min.js'></script>
+<script src="./../../bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="./../../bower_components/angular-aria/angular-aria.min.js"></script>
+<script src="./../../bower_components/angular-material/angular-material.min.js"></script>
+<script src='./../../bower_components/angular-messages/angular-messages.js'></script>
+<script src='./../../bower_components/angular-cookies/angular-cookies.min.js'></script>
+<script src='./../../bower_components/moment/moment.js'></script>
+<script src='../bower_components/angular-loading-bar/src/loading-bar.js'></script>
+<script src="./../../js/helpers/post-helper.js"></script>
+    <script src="./../js/login.js"></script>
+    <script src="./../js/preapprove.js"></script>
+    <script src="./../js/leave_applications.js"></script>
+<script src="./../../js/main.js"></script>
+<script src="./../js/login_loader.js"></script>
+
+  </body>
+</html>

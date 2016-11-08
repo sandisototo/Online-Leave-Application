@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css"/>
+    <link rel="stylesheet" href="../bower_components/angular-loading-bar/src/loading-bar.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css"/>
+    <title><%= title %></title>
+  </head>
+  <body ng-app="starterApp" ng-cloak layout="column" ng-controller="leaveController as ul" >
+    <div layout="row" layout-sm="column" layout-align="space-around">
+      <md-progress-circular ng-show="loading" md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <!-- Container #1 (see wireframe) -->
+       <md-toolbar layout="row" style="height: 12%;" class="mobile" >
+         <md-button class="menu" hide-gt-sm ng-click="toggleList()"  >
+    <i class="material-icons">menu</i>
+</md-button>
+         <h3><%= page %></h3> <p style="font-size: x-small;"><%= sub %></p>
+<md-button class="md-icon-button" aria-label="User">
+  <i class="material-icons">account_circle</i>
+    <md-tooltip>Profile</md-tooltip>
+    </md-button>
+<md-button class="md-icon-button" aria-label="Messages">
+  <i class="material-icons">chat</i>
+  <md-tooltip>Feedback</md-tooltip>
+</md-button>
+
+       </md-toolbar>

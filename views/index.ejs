@@ -1,0 +1,195 @@
+<% include templates/header.ejs %>
+<script type="text/ng-template" id="editor.html">
+    <md-dialog aria-label="Editar" class="dialog-95">
+        <form name="inputForm" novalidate ng-submit="save(select.application,select.operacion)">
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" ng-click="back()">
+                        <i class="material-icons">arrow_back</i>
+                        <md-tooltip md-delay="1500" md-autohide="true">Cancel</md-tooltip>
+                    </md-button>
+                    <div style="word-spacing:5px;">
+                    <h2  style="margin-top: 10px;">{{select.operacion}}</h2>
+                    <p style="font-size:small;" ng-show="select.operacion === 'Details' || select.operacion === 'Update'">   Status: {{select.application.status }}</p>
+                    </div>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="remove()" ng-show="select.operacion === 'Update'">
+                          <i class="material-icons">delete</i>
+                        <md-tooltip md-delay="1500" md-autohide="true">Delete</md-tooltip>
+                    </md-button>
+                    <md-button class="md-icon-button" type="submit" ng-show="select.operacion === 'New application' || select.operacion === 'Update' " ng-disabled="application_posted">
+                        <i class="material-icons">save</i>
+                        <md-tooltip md-delay="1500" md-autohide="true">Save</md-tooltip>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-content layout-padding ng-cloak>
+
+                    <md-input-container>
+                        <label>Reason</label>
+                        <input type="text" name="reason" required  ng-model="select.application.reason" />
+                        <ng-messages for="inputForm.reason.$error">
+                            <ng-message when="required">This field is required</ng-message>
+
+                        </ng-messages>
+                    </md-input-container>
+
+                      <md-input-container>
+                        <label>Who is your LEAD?</label>
+                        <md-select name="lead_email" ng-model="select.application.lead_id" required >
+                          <md-option ng-repeat="lead in leads" value="{{lead.id}}">
+                            {{lead.name}}
+                          </md-option>
+                        </md-select>
+
+                        <ng-messages for="inputForm.lead_email.$error">
+                            <ng-message when="required">This field is required</ng-message>
+                        </ng-messages>
+                      </md-input-container>
+                      <md-input-container>
+
+                            </md-input-container>
+
+                        <md-input-container>
+                          <label>Leave Type</label>
+                          <md-select name="leave_type" ng-model="select.application.leave_type_id" required>
+                            <md-option ng-repeat="leave_type in leave_types"  value="{{leave_type.id}}" ng-if="leave_type.text != 'Special Leave'">
+                              {{leave_type.text}}
+                            </md-option>
+                          </md-select>
+                          <ng-messages for="inputForm.leave_type.$error">
+                              <ng-message when="required">This field is required</ng-message>
+                          </ng-messages>
+                        </md-input-container>
+
+
+                        <h4>Start Date</h4>
+                          <md-datepicker ng-model="select.application.date_from"  md-placeholder="Start"
+                              md-min-date="minDate" md-max-date="maxDate" required md-date-filter="onlyWeekendsPredicate" ></md-datepicker>
+
+                              <h4>End Date</h4>
+                        <md-datepicker ng-model="select.application.date_to"  md-placeholder="End"
+                        md-min-date="minDate" ng-change="calculate_num_days(select.application.date_from,select.application.date_to)" md-max-date="maxDate" required md-date-filter="onlyWeekendsPredicate"></md-datepicker>
+                        <h4  ng-model = "select.application.dayDifference"  required md-date-filter="onlyWeekendsPredicate">{{dayDifference}} Day(s) Taken</h4>
+
+
+
+                        <div ng-show="select.operacion === 'Details' || select.operacion === 'Update'">
+                        <h2  style="margin-top: 10px;">HR Response</h2>
+                        <p style="font-size:small;" ng-if="select.application.reason_for_declined" >   <b>HR:</b> {{select.application.reason_for_declined }}</p>
+                        <p style="font-size:small;" ng-if="select.application.lead_comment" >   <b>Lead:</b> {{select.application.lead_comment }}</p>
+                        <p style="font-size:small;" ng-if="!select.application.reason_for_declined && !select.application.lead_comment">No response yet</p>
+                        </div>
+                </md-content>
+            </md-dialog-content>
+        </form>
+    </md-dialog>
+</script>
+<div class="container" layout="row" flex>
+  <md-sidenav ng-click="ul.toggleList()"
+          md-component-id="left"
+          md-is-locked-open="$mdMedia('gt-sm')"
+          class="md-whiteframe-4dp">
+<md-list>
+  <md-list-item >
+      <md-button>
+        <md-icon md-svg-src="https://rawgit.com/angular/material-start/es5-tutorial/app/assets/svg/avatar-1.svg" class="avatar"></md-icon>
+        {{user_data.name}}   {{user_data.surname}}
+      </md-button>
+  </md-list-item>
+
+  <md-list-item ng-repeat="u in leave_applications">
+                  <md-button ng-click="select_leave_status(u)">
+                    {{u.name}}
+                  </md-button>
+
+</md-list-item>
+  <md-list-item >
+    <md-button>
+
+      Feedback
+    </md-button>
+
+  </md-list-item>
+  <md-list-item  >
+    <md-button ng-click="leave_days()">
+
+      Leave Days
+    </md-button>
+
+  </md-list-item>
+  <md-list-item ng-click="logout()">
+    <md-button>
+
+      logout
+    </md-button>
+
+  </md-list-item>
+
+
+
+
+</md-list>
+</md-sidenav>
+<md-content flex id="content" flex>
+
+           <md-list ng-show="leave_filter" >
+           <md-subheader class="md-no-sticky">{{select.name}}</md-subheader>
+      <md-list-item class="md-3-line md-clickable" md-ink-ripple="#bbb" ng-repeat="item in select.content" ng-click="displayDialog('R', item, $event)">
+        <img ng-src="" class="md-avatar" alt="" ng-if="item.status === 0" style="background-color:#d32f2f;" />
+        <img ng-src="" class="md-avatar" alt="" ng-if="item.status === 1" style="background-color:#8BC34A;" />
+        <img ng-src="" class="md-avatar" alt="" ng-if="item.status === 3 || item.status === 2" style="background-color:#F57C00;" />
+
+
+        <div class="md-list-item-text" layout="column">
+          <h3><b>{{ item.leave_type.text }}</b></h3>
+          <h4>{{ item.reason | limitTo: 20 }}....</h4>
+        <p style="font-size: xx-small;">   <b style="color:black;">FROM:</b> <span ng-bind="item.date_from | date:'fullDate'"></span> <br/>  <b style="color:black;">TO:</b> <span ng-bind="item.date_to | date:'fullDate'"></span></p>
+        </div>
+        <!--i class="material-icons"  ng-click="displayDialog('UD', item, $event)">mode_edit</i-->
+          <md-icon aria-label="Editor" ng-if="item.status != 1 && item.status != 0" class="md-secondary material-icons"  ng-click="displayDialog('UD', item, $event)">mode_edit</md-icon>
+        <md-divider ></md-divider>
+      </md-list-item>
+      <md-list-item class="md-3-line" ng-show="!select.content.length">
+          No applications!
+      </md-list-item>
+
+    </md-list>
+    <md-content class="md-padding" layout-xs="column" layout="row" ng-show="number_of_days">
+      <div flex-xs flex-gt-xs="100" layout="column">
+        <center>
+        <h1>Leave Days Left</h1>
+<table class="rwd-table">
+  <tr>
+    <th>Annual </th>
+    <th>Sick </th>
+    <th>Family</th>
+    <th>Special </th>
+    <th>Study </th>
+  </tr>
+  <tr>
+    <td data-th="Annual">{{user_all_leave_days.annual}}</td>
+    <td data-th="Sick">{{user_all_leave_days.sick}}</td>
+    <td data-th="Family">{{user_all_leave_days.family}}</td>
+    <td data-th="Special">{{user_all_leave_days.special}}</td>
+    <td data-th="Study" style="margin-right:20px;">{{user_all_leave_days.study}}</td>
+  </tr>
+
+</table>
+
+<p>&larr; Please note: Special leave is reserved for December holidays, therefore you cannot apply for this type of leave.  &rarr;</p>
+</center>
+      </div>
+    </md-content>
+
+
+</md-content>
+<md-button class="md-fab md-fab-bottom-right" aria-label="New Application" ng-click="displayDialog('C', undefined, $event)">
+    <i class="material-icons" style="line-height: 2 !important;">mode_edit</i>
+  </md-button>
+</div>
+
+
+
+<% include templates/footer.ejs %>

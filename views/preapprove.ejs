@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <meta name="description" content="Angular Material: Theming and ARIA">
+
+    <link rel="stylesheet" href="./../../bower_components/angular-material/angular-material.min.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./../../css/main.css"/>
+    <title><%= title %></title>
+  </head>
+  <body ng-app="preapprove" ng-cloak layout="column">
+    <!-- Container #1 (see wireframe) -->
+       <md-toolbar layout="row" style="height: 12%;" class="mobile" >
+
+         <h3><%= page %></h3> <p style="font-size: x-small;"><%= sub %></p>
+
+
+       </md-toolbar>
+
+<div ng-controller="DemoCtrl" layout="column" ng-cloak class="md-inline-form">
+
+  <md-content layout-padding>
+    <div>
+      <form name="userForm" ng-submit="lead_preapprove(lead_response)">
+
+
+<p style="display:none">{{lead_response.leave_hash="<%= leave_hash %>"}}</p>
+      <h2>Leave Days Left</h2>
+<table class="rwd-table" style="font-size: small; overflow: visible;">
+<tr>
+  <th>Annual </th>
+  <th>Sick </th>
+  <th>Family</th>
+  <th>Special </th>
+  <th>Study </th>
+</tr>
+<tr>
+  <td data-th="Annual">{{user_all_leave_days.annual}}</td>
+  <td data-th="Sick">{{user_all_leave_days.sick}}</td>
+  <td data-th="Family">{{user_all_leave_days.family}}</td>
+  <td data-th="Special">{{user_all_leave_days.special}}</td>
+  <td data-th="Study" style="margin-right:20px;">{{user_all_leave_days.study}}</td>
+</tr>
+
+</table>
+
+        <p>Approve/Decline: </p>
+<md-radio-group ng-model="lead_response.status">
+  <md-radio-button value="2" ng-click="hideReasonInput()"class="md-primary" >Approve</md-radio-button>
+  <md-radio-button value="0" ng-click="showReasonInput()"> Decline </md-radio-button>
+
+</md-radio-group>
+
+<div layout-gt-sm="row">
+  <md-input-container class="md-block" flex-gt-sm ng-show="reason_input">
+    <label>Reason</label>
+    <textarea ng-model="lead_response.reason" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+  </md-input-container>
+</div>
+<md-button type="submit" style="margin-top: 20px;" class="md-raised md-primary" ng-disabled="bottonDisable" ng-model="bottonDisable">Submit</md-button>
+      </form>
+    </div>
+  </md-content>
+</div>
+<!--  Scripts-->
+<script src='./../../bower_components/jquery/dist/jquery.min.js'></script>
+<script src="./../../bower_components/angular/angular.min.js"></script>
+<script src="./../../bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="./../../bower_components/angular-aria/angular-aria.min.js"></script>
+<script src="./../../bower_components/angular-material/angular-material.min.js"></script>
+<script src='./../../bower_components/angular-messages/angular-messages.js'></script>
+<script src='./../../bower_components/angular-cookies/angular-cookies.min.js'></script>
+<!--script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script-->
+<script src='./../../bower_components/moment/moment.js'></script>
+<script src="./../../js/helpers/post-helper.js"></script>
+<script src="./../../js/preapprove.js"></script>
+
+  </body>
+</html>
